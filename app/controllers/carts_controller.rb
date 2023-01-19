@@ -48,6 +48,7 @@ class CartsController < ApplicationController
       render json: "Cart was deleted with success" , status: :ok
     end
   end
+  
 
   private
 
