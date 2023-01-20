@@ -1,7 +1,7 @@
 class CartsController < ApplicationController
   TOKEN = "secret!"
   before_action :authenticate #,except: :show
-  #validates :comment, length: { minimum: 3}  #validates :comment, presence: true
+
 
   def index
     @carts = Cart.all
