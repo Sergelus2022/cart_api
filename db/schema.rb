@@ -17,19 +17,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_074742) do
   create_table "carts", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "comment"
     t.string "api_key", null: false
     t.integer "login_count"
     t.index ["api_key"], name: "index_carts_on_api_key", unique: true
-  end
-
-  create_table "l_items", force: :cascade do |t|
-    t.bigint "cart_id", null: false
-    t.integer "product_id", null: false
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cart_id"], name: "index_l_items_on_cart_id"
   end
 
   create_table "line_items", force: :cascade do |t|
@@ -51,6 +41,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_074742) do
     t.index ["cart_id"], name: "index_sellitems_on_cart_id"
   end
 
-  add_foreign_key "l_items", "carts"
   add_foreign_key "sellitems", "carts"
 end
