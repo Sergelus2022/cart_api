@@ -31,8 +31,8 @@ class CartsController < ApplicationController
     if !@cart
       render json: "Item not found", status: :not_found
     else 
-      #@cart.login_count ++
-      render json: @cart , status: :ok
+      cart_json = @cart.as_json(only: [:id, :total_price], include: {sellitems: {only: [:id, :product, :quantity]}})
+      render json: cart_json , status: :ok
     end
   end
 
