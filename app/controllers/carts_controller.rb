@@ -60,6 +60,16 @@ class CartsController < ApplicationController
       render json: "Cart was deleted with success" , status: :ok
     end
   end
+
+  def drop
+    @cart = Cart.find_by_api_key(params[:api_key])
+    if !@cart
+      render json: "Item not found", status: :not_found
+    else 
+      @cart.sellitems.destroy_all
+      render json: "All items from cart deleted!" , status: :ok
+    end
+  end
   
 
   private
