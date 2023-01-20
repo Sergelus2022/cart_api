@@ -36,13 +36,14 @@ class CartsController < ApplicationController
     end
   end
 
-  def new
+  def add
     @cart = Cart.find_by_api_key(params[:api_key])
-    slitem = @cart.Sellitem.new
+    slitem = @cart.sellitems.new
     slitem.quantity = params[:quantity]
-    slitem.product_id = params[:product_id]
+    slitem.product = params[:product]
+    slitem.save
 
-    if !@cart
+    if !slitem.save
       render json: "Item not found", status: :not_found
     else 
       cart_json = @cart.as_json(only: [:id, :total_price], include: {sellitems: {only: [:id, :product, :quantity]}})
