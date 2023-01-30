@@ -1,12 +1,32 @@
-describe CartsController, type: :controller do
-    let(:valid_attributes) { { comment: 'Comment', api_key: 'valid_key' } }
-    let(:invalid_attributes) { { comment: '', api_key: '' } }
+require 'rails_helper'
 
-    describe "GET #index" do
-        it "returns a success response" do
-            Cart.create! valid_attributes
-            get :index, params: {}
-            expect(response).to be_successful
-        end
+RSpec.describe CartsController, type: :controller do
+  describe "GET #index" do
+    it "returns a success response" do
+      get :index
+      expect(response).to be_successful
+      expect(JSON.parse(response.body).first["comment"]).to eq("Test comment")
     end
-end    
+  end
+
+  describe "POST #create" do
+    context "with valid parameters" do
+      it "creates a new Cart" do
+        expect {
+          post :create, params: { comment: "Test comment", api_key: "1" }
+        }
+        expect(response).to be_successful
+        expect(JSON.parse(response.body)["comment"]).to eq("Test comment")
+      end
+    end
+
+    context "with missing api_key" do
+      it "returns an error response" do
+        post :create, params: { comment: "Test comment" }
+        expect(response).to have_http_status(:error)
+        expect(JSON.parse(response.body)).to eq("error")
+      end
+    end
+  end
+end
+ 
