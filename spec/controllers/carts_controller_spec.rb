@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe CartsController, type: :controller do
   describe "GET #index" do
     it "returns a success response" do
-      get :index
+      Cart.create!(comment: "Test comment")
+      get :index, params: {}
       expect(response).to be_successful
       expect(JSON.parse(response.body).first["comment"]).to eq("Test comment")
     end
@@ -13,8 +14,8 @@ RSpec.describe CartsController, type: :controller do
     context "with valid parameters" do
       it "creates a new Cart" do
         expect {
-          post :create, params: { comment: "Test comment", api_key: "1" }
-        }
+          post :create, params: { comment: "Test comment", api_key: "12345678" }
+        }.to change(Cart, :count).by(1)
         expect(response).to be_successful
         expect(JSON.parse(response.body)["comment"]).to eq("Test comment")
       end
