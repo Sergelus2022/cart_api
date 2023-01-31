@@ -2,10 +2,15 @@ class CartsController < ApplicationController
   TOKEN = "secret!"
   before_action :authenticate #,except: :show
 
+  def total_price
+    sellitems.sum(:price)
+  end
 
   def index
     @carts = Cart.all
-    render :json => @carts
+    puts "yoooo"
+    cart_json = @carts.as_json(only: [:id, :total_price])
+      render json: cart_json , status: :ok
   end
 
   def create
@@ -31,7 +36,7 @@ class CartsController < ApplicationController
     if !@cart
       render json: "Item not found", status: :not_found
     else 
-      cart_json = @cart.as_json(only: [:id, :total_price], include: {sellitems: {only: [:id, :product, :quantity, :price]}})
+      cart_json = @cart.as_json(only: [:id, :comment ], include: {sellitems: {only: [:id, :product, :quantity, :price]}})
       render json: cart_json , status: :ok
     end
   end
@@ -70,6 +75,7 @@ class CartsController < ApplicationController
       render json: "All items from cart deleted!" , status: :ok
     end
   end
+
   def drop_item
     @cart = Cart.find_by_api_key(params[:api_key])
     if !@cart
@@ -79,7 +85,6 @@ class CartsController < ApplicationController
       render json: "All items from cart deleted!" , status: :ok
     end
   end
-  
 
   private
 
@@ -90,5 +95,10 @@ class CartsController < ApplicationController
       ActiveSupport::SecurityUtils.secure_compare(token, TOKEN)
     end
   end
+
+  def set_summ
+      self.cost = ends_at - starts_at
+  end
+  
   
 end
