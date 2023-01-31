@@ -1,6 +1,6 @@
 class CartsController < ApplicationController
   TOKEN = "secret!"
-  before_action :authenticate #,except: :show
+  before_action :authenticate , except: :show
 
   def total_price
     sellitems.sum(:price)
@@ -94,10 +94,6 @@ class CartsController < ApplicationController
       # timing attacks.
       ActiveSupport::SecurityUtils.secure_compare(token, TOKEN)
     end
-  end
-
-  def set_summ
-      self.cost = ends_at - starts_at
   end
   
   
